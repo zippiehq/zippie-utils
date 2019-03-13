@@ -1,0 +1,24 @@
+{
+  "name": "@zippie/zippie-utils",
+  "version": "0.1.0",
+  "description": "Common utilities for use with the Zippie Platform.",
+  "main": "src/index.js",
+  "scripts": {
+    "test:dev": "nodemon --watch ./src --watch ./test --exec 'mocha test/test.js'",
+    "test": "mocha test/test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cids": "^0.5.7",
+    "secp256k1": "^3.6.2",
+    "sha.js": "^2.4.11"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "nodemon": "^1.18.10"
+  }
+}
