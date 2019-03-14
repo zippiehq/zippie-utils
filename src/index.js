@@ -21,9 +21,9 @@
  *
  */
 
- module.exports = {
-   signers: require('./signers'),
-   fms: require('./fms'),
-   permastore: require('./permastore'),
- }
- 
+module.exports = {
+  fms: require('./fms'),
+  crdt: require('./crdt'),
+  permastore: require('./permastore'),
+  signers: require('./signers'),
+}
