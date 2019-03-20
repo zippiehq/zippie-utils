@@ -21,6 +21,21 @@
  *
  */
 const secp256k1 = require('secp256k1')
+const crypto = require('crypto')
+
+function aes128cbcEncrypt(plaintext, key, iv) {
+    const cipher = crypto.createCipheriv('aes-128-cbc', key, iv)
+    const firstChunk = cipher.update(plaintext)
+    const secondChunk = cipher.final()
+    return Buffer.concat([firstChunk, secondChunk])
+  }
+  
+function aes128cbcDecrypt(ciphertext, key, iv) {
+    const cipher = crypto.createDecipheriv('aes-128-cbc', key, iv)
+    const firstChunk = cipher.update(ciphertext)
+    const secondChunk = cipher.final()
+    return Buffer.concat([firstChunk, secondChunk])
+}
 
  /**
  * Ensures public key parameters are in correct format.
@@ -32,4 +47,8 @@ function convertPublicKey (pubkey, compress = false) {
   return secp256k1.publicKeyConvert(pubkey, compress)
 }
 
-module.exports = { convertPublicKey }
+function randomKey(size) {
+  return crypto.randomBytes(size)
+}
+
+module.exports = { convertPublicKey, aes128cbcDecrypt, aes128cbcEncrypt, randomKey }
