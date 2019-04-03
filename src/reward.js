@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Zippie Ltd.
+ * Copyright (c) 2018 Zippie Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,13 +21,33 @@
  *
  */
 
-module.exports = {
-  fms: require('./fms'),
-  crdt: require('./crdt'),
-  pmg: require('./pmg'),
-  permastore: require('./permastore'),
-  signers: require('./signers'),
-  utils: require('./utility'),
-  reward: require('./reward'),
-  airtime: require('./airtime')
-}
+ /**
+ * @module zippie-utils/reward
+ */
+
+const axios = require('axios')
+const __uri = 'https://kovan-reward.zippie.org/reward'
+
+/**
+ * Get payment link for reward tokens
+ * @param {string} token token contract address
+ * @param {String} amount  token amount
+ * @param {String} message  message for payment link
+ * @param {String} apiKey  zippie api key
+ */
+async function getRewardTokens(token, amount, message, apiKey) {
+    const response = await axios.post(
+        __uri,
+      {
+        token: token,
+        amount: amount,
+        message: message
+      },
+      { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
+    )
+
+    if ('error' in response.data) throw response.data.error
+    return response.data.url
+  }
+
+  module.exports = {getRewardTokens}
