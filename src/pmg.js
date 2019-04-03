@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Zippie Ltd.
+ * Copyright (c) 2018 Zippie Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,13 +21,24 @@
  *
  */
 
-module.exports = {
-  fms: require('./fms'),
-  crdt: require('./crdt'),
-  pmg: require('./pmg'),
-  permastore: require('./permastore'),
-  signers: require('./signers'),
-  utils: require('./utility'),
-  reward: require('./reward'),
-  airtime: require('./airtime')
+const axios = require('axios')
+const __uri = 'https://kovan-pmg.zippie.org'
+
+/**
+ * 
+ * @param {*} to 
+ * @param {*} data 
+ * @param {*} tx 
+ */
+async function sponsorCheckCashingWithApproveTx(to, data, tx) {
+    const response = await axios.post(__uri + '/sponsor_redeemblankcheck_v1', {
+        to,
+        data,
+        tx
+      })
+    
+    if ('error' in response.data) throw response.data.error
+    return response.data
 }
+
+module.exports = { sponsorCheckCashingWithApproveTx }

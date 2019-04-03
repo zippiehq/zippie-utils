@@ -5,4 +5,6 @@ describe ('zippie-utils', function () {
   require('./test_fms')
   require('./test_permastore')
   require('./test_feeds')
+  require('./test_reward')
+  require('./test_airtime')
 })
