@@ -28,6 +28,12 @@ const testTokens = {
         message: 'AIRTIME-USD Reward Test',
         amount: '5',
         appUri: 'https://my.dev.zippie.org',
+    },
+    AIRTIMEXAF: {
+        address: "0xe2586221443CCf2328Eb0DD5537be213BE8a6402",
+        message: "AIRTIME-XAF TEST",
+        amount: '100',
+        appUri: 'https://my.dev.zippie.org',
     }
 }
 

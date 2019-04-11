@@ -26,7 +26,10 @@
  */
 
 const axios = require('axios')
-const __uri = 'https://kovan-reward.zippie.org/reward'
+const shajs = require('sha.js')
+const __uri = 'https://kovan-reward.zippie.org'
+const __uriv2 = 'https://rewardapi-kovan.zippie.org'
+
 
 /**
  * Get payment link for reward tokens
@@ -37,7 +40,7 @@ const __uri = 'https://kovan-reward.zippie.org/reward'
  */
 async function getRewardTokens(token, amount, message, apiKey) {
     const response = await axios.post(
-        __uri,
+        __uri + '/reward',
       {
         token: token,
         amount: amount,
@@ -50,4 +53,141 @@ async function getRewardTokens(token, amount, message, apiKey) {
     return response.data.url
   }
 
-  module.exports = {getRewardTokens}
+  function sha256hash(userid) {
+    const buf = Buffer.from(userid, 'hex')
+    const hash = shajs('sha256').update(buf).digest()
+
+    return hash.toString('hex')
+  }
+
+/**
+ * 
+ * @param {*} userid 
+ * @param {*} token 
+ */
+async function getUserBalance(userid, token, apiKey) {
+  const userRef = sha256hash(userid)
+  const response = await axios.post(
+    __uriv2 + '/get_user_balance',
+    {
+      userid: userRef,
+      token_address: token
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
+  )
+
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+/**
+ * 
+ * @param {*} userid 
+ * @param {*} token 
+ */
+async function getCheques(userid, token, apiKey) {
+  const userRef = sha256hash(userid)
+  const response = await axios.post(
+    __uriv2 + '/get_cheques',
+    {
+      userid: userRef,
+      token_address: token
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
+  )
+
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+/**
+ * 
+ * @param {*} userid 
+ * @param {*} token 
+ */
+async function createPendingCheque(userid, token, apiKey) {
+  const userRef = sha256hash(userid)
+  const response = await axios.post(
+    __uriv2 + '/create_pending_cheque',
+    {
+      userid: userRef,
+      token_address: token
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
+  )
+
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+/**
+ * 
+ * @param {*} userid 
+ * @param {*} token 
+ * @param {*} amount 
+ */
+async function rewardTo(userid, token, amount, apiKey) {
+  const userRef = sha256hash(userid)
+  const intAmount = parseInt(amount)
+  const response = await axios.post(
+    __uriv2 + '/reward_to',
+    {
+      userid: userRef,
+      token_address: token,
+      reward_amount: intAmount
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
+  )
+
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+/**
+ * 
+ * @param {*} cheque 
+ */
+async function markChequeClaimed(cheque, apiKey) {
+  const response = await axios.post(
+    __uriv2 + '/mark_cheque_claimed',
+    {
+      cheque
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
+  )
+
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+/**
+ * 
+ * @param {*} userid 
+ * @param {*} walletAddress 
+ * @param {*} token 
+ */
+async function registerWallet(userid, walletAddress, token, apiKey) {
+  const userRef = sha256hash(userid)
+  const response = await axios.post(
+    __uriv2 + '/register_wallet',
+    {
+      userid: userRef,
+      address: walletAddress,
+      token_address: token
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
+  )
+
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+module.exports = {
+  getRewardTokens,
+  getUserBalance,
+  getCheques,
+  createPendingCheque,
+  rewardTo,
+  markChequeClaimed,
+  registerWallet
+}
