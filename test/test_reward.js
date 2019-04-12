@@ -6,27 +6,21 @@ const testTokens = require('./test_tokens')
 describe('test: reward', function () {
 
     this.timeout('4000')
-    Object.keys(testTokens).forEach(key => {
-        it('getRewardTokens ' + key, function(done) {
-        let token = testTokens[key]
-        reward.getRewardTokens(token.address, token.amount, token.message, token.address)
-            .then(result => {
-                expect(result).to.contain(token.appUri)
-                done()
-            })
-            .catch(error => {
-                done(error)
-            })
-        })      
-    })
 
     const userId = utils.randomKey(64).toString('hex')
-    console.log('UserID', userId)
+    const prefix = utils.randomKey(8).toString('hex')
+
+
+    reward.init(prefix, 'not used', 'apikey')
+
+    const userRef = reward.getUserReference(userId)
+    console.log('UserID', userRef)
 
     Object.keys(testTokens).forEach(key => {
         it('rewardTo ' + key, function(done) {
             let token = testTokens[key]
-            reward.rewardTo(userId, token.address, token.amount, 'apikey').then(result => {
+
+            reward.rewardTo(userRef, token.address, token.amount).then(result => {
                 expect(result).to.contain({success: true})
                 done()
             }).catch(error=> {
@@ -36,9 +30,10 @@ describe('test: reward', function () {
     })
 
     Object.keys(testTokens).forEach(key => {
-        it('getUserBalance ' + key, function(done) {
+        it('getUserBalance ${key}', function(done) {
             let token = testTokens[key]
-            reward.getUserBalance(userId, token.address, 'apikey').then(result => {
+            reward.getUserBalance(userRef, token.address).then(result => {
+                console.log(result)
                 expect(result).to.contain.all.keys(['balance', 'pending', 'wallets', 'cheques'])
                 done()
             }).catch(error=> {
@@ -50,7 +45,7 @@ describe('test: reward', function () {
     Object.keys(testTokens).forEach(key => {
         it('createPendingCheque ' + key, function(done) {
             let token = testTokens[key]
-            reward.createPendingCheque(userId, token.address, 'apikey').then(result => {
+            reward.createPendingCheque(userRef, token.address).then(result => {
                 console.log(result)
                 done()
             }).catch(error=> {
@@ -62,7 +57,7 @@ describe('test: reward', function () {
     Object.keys(testTokens).forEach(key => {
         it('getCheques ' + key, function(done) {
             let token = testTokens[key]
-            reward.getCheques(userId, token.address, 'apikey').then(result => {
+            reward.getCheques(userRef, token.address).then(result => {
                 console.log(result)
                 done()
             }).catch(error=> {
