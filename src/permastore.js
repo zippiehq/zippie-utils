@@ -34,9 +34,13 @@ const util = require('./utility')
  */
 async function fetch (cid) {
   const uri = 'https://permastore2.zippie.org/ipfs/' + cid
+  try {
   const response = await axios.get(uri, { responseType: 'arraybuffer' })
   if ('error' in response.data) throw response.data.error
   return response.data
+  } catch (error) {
+    return {error}
+  }
 }
 
 /**
@@ -93,9 +97,29 @@ async function insert (data, func) {
   return response.data
 }
 
+/**
+ * 
+ * @param {String} entry // Permastore Entry
+ */
+async function fetchEntry (entry) {
+  const s = entry.split('.')
+  const proof = s[2]
+  const cid = s[1]
+
+  const proof_data = await fetch(proof)
+
+  // XXX: Verify Proof
+
+  const cid_data = await fetch(cid)
+
+
+  return cid_data
+}
+
 module.exports = {
   fetch,
   store,
   list,
   insert,
+  fetchEntry
 }

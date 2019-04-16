@@ -37,7 +37,7 @@ async function sponsorCheckCashingWithApproveTx(to, data, tx) {
         tx
       })
     
-    if ('error' in response.data) throw response.data.error
+    if ('error' in response) throw response.error
     return response.data
 }
 
