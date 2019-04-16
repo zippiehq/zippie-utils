@@ -22,6 +22,7 @@
  */
 const secp256k1 = require('secp256k1')
 const crypto = require('crypto')
+const bs58 = require('bs58')
 
 function aes128cbcEncrypt(plaintext, key, iv) {
     const cipher = crypto.createCipheriv('aes-128-cbc', key, iv)
@@ -51,4 +52,26 @@ function randomKey(size) {
   return crypto.randomBytes(size)
 }
 
-module.exports = { convertPublicKey, aes128cbcDecrypt, aes128cbcEncrypt, randomKey }
+function bs58KeyIvEncode(key,iv) {
+  const keyiv = Buffer.concat([key, iv])
+  const encoded = bs58.encode(keyiv)
+
+  return encoded
+}
+
+function bs58KeyIvDecode(keyiv) {
+  const decoded = bs58.decode(keyiv)
+
+  const key = decoded.slice(0,16)
+  const iv = decoded.slice(16,32)
+
+  return {key, iv}
+}
+
+module.exports = { 
+  convertPublicKey, 
+  aes128cbcDecrypt, 
+  aes128cbcEncrypt, 
+  randomKey,
+  bs58KeyIvEncode,
+  bs58KeyIvDecode }
