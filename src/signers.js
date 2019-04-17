@@ -20,6 +20,11 @@
  * SOFTWARE.
  *
  */
+
+ /**
+ * @module zippie-utils/signers
+ */
+
 const mod = require('secp256k1')
 
 /**

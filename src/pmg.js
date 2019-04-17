@@ -21,6 +21,10 @@
  *
  */
 
+/**
+ * @module zippie-utils/pmg
+ */
+
 const axios = require('axios')
 const __uri = 'https://kovan-pmg.zippie.org'
 
