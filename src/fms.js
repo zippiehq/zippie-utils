@@ -20,6 +20,11 @@
  * SOFTWARE.
  *
  */
+
+ /**
+ * @module zippie-utils/fms
+ */
+
 const axios = require('axios')
 const shajs = require('sha.js')
 

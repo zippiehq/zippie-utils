@@ -21,6 +21,10 @@
  *
  */
 
+ /**
+ * @module zippie-utils/feeds
+ */
+
 const permastore = require('./permastore')
 const utility = require('./utility')
 

@@ -20,6 +20,11 @@
  * SOFTWARE.
  *
  */
+
+ /**
+ * @module zippie-utils/crdt
+ */
+
 const secp256k1 = require('secp256k1')
 const permastore = require('./permastore')
 

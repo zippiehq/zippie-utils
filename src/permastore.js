@@ -20,10 +20,14 @@
  * SOFTWARE.
  *
  */
+
+ /**
+ * @module zippie-utils/permastore
+ */
+
 const CID = require('cids')
 const axios = require('axios')
 const shajs = require('sha.js')
-const secp256k1 = require('secp256k1')
 
 const util = require('./utility')
 
@@ -34,13 +38,9 @@ const util = require('./utility')
  */
 async function fetch (cid) {
   const uri = 'https://permastore2.zippie.org/ipfs/' + cid
-  try {
   const response = await axios.get(uri, { responseType: 'arraybuffer' })
   if ('error' in response.data) throw response.data.error
   return response.data
-  } catch (error) {
-    return {error}
-  }
 }
 
 /**
