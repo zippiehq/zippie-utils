@@ -167,6 +167,30 @@ async function registerWallet(userRef, walletAddress, token) {
   return response.data
 }
 
+async function createReferralCode(userid, apiKey) {
+  const result = await axios.post(
+    __uri + '/create_referral_code',
+    {
+      userid:  userid,
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return result.data
+}
+
+async function getUserIdFromReferralCode(referral_code, apiKey) {
+  const result = await axios.post(
+    __uri + '/get_userid_from_referral_code',
+    {
+      referral_code: referral_code
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return result.data
+}
+
 module.exports = {
   init,
   getUserReference,
@@ -175,5 +199,7 @@ module.exports = {
   createPendingCheque,
   rewardTo,
   markChequeClaimed,
-  registerWallet
+  registerWallet,
+  createReferralCode,
+  getUserIdFromReferralCode
 }
