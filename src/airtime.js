@@ -26,7 +26,11 @@
  */
 
 const axios = require('axios')
-const __uri = 'https://airtime-001-dub.zippie.org'
+let __uri = 'https://airtime-001-dub.zippie.org'
+
+function setUri(uri) {
+  __uri = uri
+}
 
 /**
  * Gets available country / operator details
@@ -93,4 +97,10 @@ async function checkOrderStatus(orderId) {
     return response.data
 }
 
-module.exports = {getInventory, checkPhoneNumber, payForTopup, checkOrderStatus}
+module.exports = {
+  setUri,
+  getInventory,
+  checkPhoneNumber,
+  payForTopup,
+  checkOrderStatus
+}
