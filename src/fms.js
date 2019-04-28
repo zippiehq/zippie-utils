@@ -30,7 +30,11 @@ const shajs = require('sha.js')
 
 const util = require('./utility')
 
-const __uri = 'https://fms.zippie.org'
+let __uri = 'https://fms.zippie.org'
+
+function setUri(uri) {
+  __uri = uri
+}
 
 /**
  * 
@@ -94,6 +98,7 @@ async function revoke (func) {
 }
 
 module.exports = {
+  setUri,
   store,
   fetch,
   revoke,

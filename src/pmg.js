@@ -26,7 +26,11 @@
  */
 
 const axios = require('axios')
-const __uri = 'https://kovan-pmg.zippie.org'
+let __uri = 'https://kovan-pmg.zippie.org'
+
+function setUri(uri) {
+  __uri = uri
+}
 
 /**
  * 
@@ -45,4 +49,7 @@ async function sponsorCheckCashingWithApproveTx(to, data, tx) {
     return response.data
 }
 
-module.exports = { sponsorCheckCashingWithApproveTx }
+module.exports = { 
+  setUri,
+  sponsorCheckCashingWithApproveTx 
+}
