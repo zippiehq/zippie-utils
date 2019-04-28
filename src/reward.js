@@ -27,16 +27,17 @@
 
 const axios = require('axios')
 const shajs = require('sha.js')
-const __uri = 'https://rewardapi-kovan.zippie.org'
 
+let __uri = 'https://rewardapi-kovan.zippie.org'
 let __prefix = ''
 let __privateKey = ''
 let __apiKey = ''
 
-function init(prefix, privateKey, apiKey) {
+function init(prefix, privateKey, apiKey, uri) {
   __prefix = prefix
   __privateKey = privateKey
   __apiKey = apiKey
+  __uri = uri || __uri
 }
 
 function sha256hash(message) {
@@ -168,7 +169,7 @@ async function registerWallet(userRef, walletAddress, token) {
 }
 
 async function createReferralCode(userid, apiKey) {
-  const result = await axios.post(
+  const response = await axios.post(
     __uri + '/create_referral_code',
     {
       userid:  userid,
@@ -176,11 +177,11 @@ async function createReferralCode(userid, apiKey) {
     { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
   )
   if ('error' in response.data) throw response.data.error
-  return result.data
+  return response.data
 }
 
 async function getUserIdFromReferralCode(referral_code, apiKey) {
-  const result = await axios.post(
+  const response = await axios.post(
     __uri + '/get_userid_from_referral_code',
     {
       referral_code: referral_code
@@ -188,7 +189,34 @@ async function getUserIdFromReferralCode(referral_code, apiKey) {
     { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
   )
   if ('error' in response.data) throw response.data.error
-  return result.data
+  return response.data
+}
+
+async function getUserKey(userid, key, apiKey) {
+  const response = await axios.post(
+    __uri + '/get_userid_kv',
+    {
+      userid: userid,
+      key: key
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+async function setUserKey(userid, key, value, apiKey) {
+  const response = await axios.post(
+    __uri + '/set_userid_kv',
+    {
+      userid: userid,
+      key: key,
+      value: value
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return response.data
 }
 
 module.exports = {
@@ -201,5 +229,7 @@ module.exports = {
   markChequeClaimed,
   registerWallet,
   createReferralCode,
-  getUserIdFromReferralCode
+  getUserIdFromReferralCode,
+  getUserKey,
+  setUserKey
 }
