@@ -88,7 +88,7 @@ function getUserReference(userid) {
  * Gets the current reward balance for a user
  * @param {String} userRef secure user reference
  * @param {String} token reward token address
- * @returns 
+ * @returns {String} balance
  */
 async function getUserBalance(userRef, token) {
   const response = await axios.post(

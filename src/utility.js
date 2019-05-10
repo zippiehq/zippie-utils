@@ -71,7 +71,7 @@ function convertPublicKey (pubkey, compress = false) {
 /**
  * Get a Cryptographically secure
  * random number of byte length size
- * @param {*} size 
+ * @param {Number} size 
  * @returns {Buffer}
  */
 function randomKey(size) {
@@ -94,7 +94,7 @@ function bs58KeyIvEncode(key,iv) {
 /**
  * Decodes base58 string into Key and IV
  * @param {String} keyiv 
- * @returns {key, iv}
+ * @returns {Object} {key, iv}
  */
 function bs58KeyIvDecode(keyiv) {
   const decoded = bs58.decode(keyiv)
