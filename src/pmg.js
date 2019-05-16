@@ -49,7 +49,16 @@ async function sponsorCheckCashingWithApproveTx(to, data, tx) {
     return response.data
 }
 
+async function sponsorRedeemBlankCheck_v2(to, data) {
+  const response = await axios.post(__uri + '/sponsor_redeemblankcheck_v2', {
+    to,
+    data
+  })
+  return response.data
+}
+
 module.exports = { 
   setUri,
-  sponsorCheckCashingWithApproveTx 
+  sponsorCheckCashingWithApproveTx,
+  sponsorRedeemBlankCheck_v2 
 }
