@@ -1,6 +1,6 @@
 {
   "name": "@zippie/zippie-utils",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "Common utilities for use with the Zippie Platform.",
   "main": "src/index.js",
   "scripts": {
