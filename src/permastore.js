@@ -30,16 +30,33 @@ const axios = require('axios')
 const shajs = require('sha.js')
 
 const util = require('./utility')
+const Unixfs = require('ipfs-unixfs')
+const dagPB = require('ipld-dag-pb')
 
+async function recreate_cid (buf) {
+  var ufs = new Unixfs('file', buf)
+  const dagNode = dagPB.DAGNode.create(ufs.marshal())
+  const cid = await dagPB.util.cid(dagPB.util.serialize(dagNode), {cidVersion: 0})
+    
+  const multihash = cid.toBaseEncodedString('base58btc')  
+  return multihash
+}
 
 /**
  * Fetch object from IPFS service
  * @param {String} cid Multihash of target object to retreive
  */
-async function fetch (cid) {
-  const uri = 'https://permastore2.zippie.org/ipfs/' + cid
+async function fetch (cid, mirroruri = 'https://permastore2.zippie.org') {
+  const uri = mirroruri + '/ipfs/' + cid
   const response = await axios.get(uri, { responseType: 'arraybuffer' })
+  
   if ('error' in response.data) throw response.data.error
+
+  const fetchedcid = await recreate_cid(Buffer.from(response.data))
+  if (fetchedcid !== cid) {
+    throw 'ERROR: Downloaded data CID (' + fetchedcid + ') does not match CID requested (' + cid + ')'
+  }
+
   return response.data
 }
 
