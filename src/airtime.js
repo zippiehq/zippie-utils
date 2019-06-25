@@ -26,7 +26,7 @@
  */
 
 const axios = require('axios')
-let __uri = 'https://airtime-001-dub.zippie.org'
+let __uri = 'https://goerli-airtime.zippie.org'
 
 function setUri(uri) {
   __uri = uri
@@ -97,10 +97,16 @@ async function checkOrderStatus(orderId) {
     return response.data
 }
 
+async function getAllowedTokens() {
+  const response = await axios.get(__uri + '/allowed_tokens')
+  return response.data
+}
+
 module.exports = {
   setUri,
   getInventory,
   checkPhoneNumber,
   payForTopup,
-  checkOrderStatus
+  checkOrderStatus,
+  getAllowedTokens
 }

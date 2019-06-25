@@ -26,7 +26,7 @@
  */
 
 const axios = require('axios')
-let __uri = 'https://kovan-pmg.zippie.org'
+let __uri = 'https://goerli-pmg.zippie.org'
 
 function setUri(uri) {
   __uri = uri

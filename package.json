@@ -6,6 +6,7 @@
   "scripts": {
     "test:dev": "nodemon --watch ./src --watch ./test --exec 'mocha test/test.js'",
     "test": "mocha test/test.js",
+    "test-services": "mocha test/test_services.js",
     "doc": "jsdoc --configure .jsdoc.json --verbose"
   },
   "keywords": [],
