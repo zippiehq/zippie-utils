@@ -42,7 +42,7 @@
 const axios = require('axios')
 const shajs = require('sha.js')
 
-let __uri = 'https://rewardapi-kovan.zippie.org'
+let __uri = 'https://goerli-rewardapi.zippie.org'
 let __prefix = ''
 let __privateKey = ''
 let __apiKey = ''
