@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Zippie Ltd.
+ * Copyright (c) 2018 Zippie Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,14 +21,25 @@
  *
  */
 
-module.exports = {
-  fms: require('./fms'),
-  crdt: require('./crdt'),
-  pmg: require('./pmg'),
-  permastore: require('./permastore'),
-  signers: require('./signers'),
-  utils: require('./utility'),
-  reward: require('./reward'),
-  airtime: require('./airtime'),
-  dashboard: require('./dashboard'),
+/**
+ * @module zippie-utils/dashboard
+ */
+
+const axios = require('axios')
+let __uri = 'https://settings.zippie.org'
+
+function setUri(uri) {
+  __uri = uri
+}
+
+async function getDashboardTokenInfo() {
+    const response = await axios.get(__uri + '/applications.json', {})
+    
+    if ('error' in response) throw response.error
+    return response.data
+}
+
+module.exports = { 
+  setUri,
+  getDashboardTokenInfo,
 }
