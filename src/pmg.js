@@ -57,8 +57,21 @@ async function sponsorRedeemBlankCheck_v2(to, data) {
   return response.data
 }
 
+async function deployToken(to, owner, name, symbol, decimals, amount) {
+  const response = await axios.post(__uri + '/sponsor_deployrewardtoken',{
+    to,
+    owner,
+    name,
+    symbol,
+    decimals,
+    amount
+  })
+  return response.data
+}
+
 module.exports = { 
   setUri,
   sponsorCheckCashingWithApproveTx,
-  sponsorRedeemBlankCheck_v2 
+  sponsorRedeemBlankCheck_v2,
+  deployToken 
 }
