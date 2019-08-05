@@ -85,6 +85,29 @@ function getUserReference(userid) {
 }
 
 /**
+ * Sends a system event to the Reward API
+ * Reward API uses configured events rules to automatically reward users
+ * 
+ * @param {String} userRef secure user reference
+ * @param {String} eventCode configured event code from dashboard
+ * @param {Number} transactionAmount (optional) value of event transaction
+ */
+async function sendEvent(userRef, eventCode, transactionAmount) {
+  const response = await axios.post(
+    __uri + '/event',
+    {
+      event: eventCode,
+      userRef,
+      transactionAmount
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
+  )
+
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+/**
  * Gets the current reward balance for a user
  * @param {String} userRef secure user reference
  * @param {String} token reward token address
@@ -127,13 +150,15 @@ async function getCheques(userRef, token) {
  * Creates a pending payment with the current balance of a reward token
  * @param {String} userRef secure user reference
  * @param {String} token reward token address
+ * @param {String} message display message for transaction
  */
-async function createPendingCheque(userRef, token) {
+async function createPendingCheque(userRef, token, message) {
   const response = await axios.post(
     __uri + '/create_pending_cheque',
     {
       userid: userRef,
-      token_address: token
+      token_address: token,
+      message
     },
     { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
   )
@@ -275,6 +300,7 @@ async function setUserKey(userRef, key, value) {
 module.exports = {
   init,
   getUserReference,
+  sendEvent,
   getUserBalance,
   getCheques,
   createPendingCheque,
