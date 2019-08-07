@@ -33,7 +33,7 @@ function setUri(uri) {
 }
 
 async function getDashboardTokenInfo() {
-    const response = await axios.get(__uri + '/applications.json', {})
+    const response = await axios.get(__uri + '/applications.json?xhr', {})
     
     if ('error' in response) throw response.error
     return response.data
