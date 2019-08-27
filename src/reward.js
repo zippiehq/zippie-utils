@@ -297,6 +297,73 @@ async function setUserKey(userRef, key, value) {
   return response.data
 }
 
+async function createOTP(phonenumber, message, referralCode, customer) {
+  const response = await axios.post(
+    __uri + '/create_otp',
+    {
+      phonenumber,
+      message,
+      referralCode,
+      customer
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+async function resendOTP(phonenumber, message, customer) {
+  const response = await axios.post(
+    __uri + '/resend_otp',
+    {
+      phonenumber,
+      message,
+      customer
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+async function submitOTP(phonenumber, otpCode, customer) {
+  const response = await axios.post(
+    __uri + '/submit_otp',
+    {
+      phonenumber,
+      otp: otpCode,
+      customer
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+async function checkPhoneNumber(phonenumber) {
+  const response = await axios.post(
+    __uri + '/check_phone_number',
+    {
+      phonenumber
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+async function finishReferral(phonenumber) {
+  const response = await axios.post(
+    __uri + '/finish_referral',
+    {
+      phonenumber
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
 module.exports = {
   init,
   getUserReference,
@@ -310,5 +377,10 @@ module.exports = {
   createReferralCode,
   getUserIdFromReferralCode,
   getUserKey,
-  setUserKey
+  setUserKey,
+  createOTP,
+  resendOTP,
+  submitOTP,
+  checkPhoneNumber,
+  finishReferral
 }
