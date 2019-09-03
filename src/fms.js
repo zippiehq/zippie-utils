@@ -120,5 +120,6 @@ module.exports = {
   setUri,
   store,
   fetch,
+  fetchJson,
   revoke,
 }
