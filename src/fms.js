@@ -81,6 +81,25 @@ async function fetch (func) {
  * 
  * @param {SignerFunc} func
  */
+async function fetchJson (func) {
+  // Timestamp used to generate signature for device verification on FMS
+  const timestamp = Date.now().toString()
+  const digest = shajs('sha256').update(timestamp).digest()
+
+  const { signature: sig, recovery } = await func(digest)
+
+  const response = await axios.post(__uri + '/fetch', {
+    timestamp, sig, recovery
+  })
+
+  if ('error' in response.data) throw response.data.error.code
+  return response.data
+}
+
+/**
+ * 
+ * @param {SignerFunc} func
+ */
 async function revoke (func) {
   // Timestamp used to generate signature for device verification on FMS
   const timestamp = Date.now().toString()
