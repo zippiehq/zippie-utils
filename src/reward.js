@@ -364,6 +364,59 @@ async function finishReferral(phonenumber) {
   return response.data
 }
 
+async function queuePendingReward(userRef, amount, tokenAddress, message, expiry) {
+  const response = await axios.post(
+    __uri + '/queue_pending_reward',
+    {
+      userid: userRef,
+      reward_amount: amount,
+      token_address: tokenAddress,
+      reward_message: message,
+      expiry
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+async function getPendingRewards(userRef, tokenAddress) {
+  const response = await axios.post(
+    __uri + '/get_pending_rewards',
+    {
+      userid: userRef,
+      tokenAddress
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+async function releasePendingReward(rewardId) {
+  const response = await axios.post(
+    __uri + '/release_pending_reward',
+    {
+      rewardId
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+async function cancelPendingReward(rewardId) {
+  const response = await axios.post(
+    __uri + '/cancel_pending_reward',
+    {
+      rewardId
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
+  )
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
 module.exports = {
   init,
   getUserReference,
@@ -382,5 +435,9 @@ module.exports = {
   resendOTP,
   submitOTP,
   checkPhoneNumber,
-  finishReferral
+  finishReferral,
+  queuePendingReward,
+  getPendingRewards,
+  releasePendingReward,
+  cancelPendingReward
 }
