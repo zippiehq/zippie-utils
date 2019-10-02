@@ -19,7 +19,8 @@
     "ipfs-unixfs": "^0.1.16",
     "ipld-dag-pb": "^0.17.4",
     "secp256k1": "^3.7.1",
-    "sha.js": "^2.4.11"
+    "sha.js": "^2.4.11",
+    "xhr-promise": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",

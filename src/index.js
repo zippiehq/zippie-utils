@@ -22,13 +22,14 @@
  */
 
 module.exports = {
-  fms: require('./fms'),
-  crdt: require('./crdt'),
-  pmg: require('./pmg'),
-  permastore: require('./permastore'),
-  signers: require('./signers'),
-  utils: require('./utility'),
-  reward: require('./reward'),
-  airtime: require('./airtime'),
-  dashboard: require('./dashboard'),
-}
+  fms: require("./fms"),
+  crdt: require("./crdt"),
+  pmg: require("./pmg"),
+  permastore: require("./permastore"),
+  signers: require("./signers"),
+  utils: require("./utility"),
+  reward: require("./reward"),
+  airtime: require("./airtime"),
+  dashboard: require("./dashboard"),
+  mailbox: require("./mailbox")
+};
