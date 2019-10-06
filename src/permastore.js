@@ -166,5 +166,6 @@ module.exports = {
   store,
   list,
   insert,
-  fetchEntry
+  fetchEntry,
+  insertCID
 }
