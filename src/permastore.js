@@ -115,6 +115,34 @@ async function insert (data, func) {
 }
 
 /**
+ * Store a CID in IPFS and insert a reference into permastore V2 index
+ * using supplied function to generate auth signature.
+ * @param {String} cid CID to reference in index
+ * @param {SignerFunc} func Function used to generate auth signature
+ */
+async function insertCID (multihash, func) {
+  const uri = 'https://fms.zippie.org/perma_store_v2'
+
+  const timestamp = Math.floor(Date.now() / 1000) - 1549458383
+
+  const cid = new CID(multihash)
+  const buf = Buffer.alloc(cid.buffer.length + 4, 0x00)
+
+  cid.buffer.copy(buf, 4)
+  buf.writeUInt32LE(timestamp, 0)
+
+  const hash = shajs('sha256').update(buf).digest()
+  const signature = await func(hash)
+
+  const response = await axios.post(uri, {
+    timestamp, cid: multihash, signature
+  })
+
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+/**
  * 
  * @param {String} entry // Permastore Entry
  */
