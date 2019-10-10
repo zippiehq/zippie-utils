@@ -61,6 +61,38 @@ async function fetch (cid, mirroruri = 'https://permastore2.zippie.org') {
 }
 
 /**
+ * Encrypt Object as JSON Encoded String
+ * With random Key and IV
+ * @param {Object} data 
+ * @returns {data, keyiv} data: buffer with encrypted data keyiv: bs58 encoded keyiv string
+ */
+async function encryptObject (data) {
+  var dataJson = JSON.stringify(data)
+  var data2 = Buffer.from(dataJson)
+  var key = util.randomKey(16)
+  var iv = util.randomKey(16)
+
+  const encrypted = util.aes128cbcEncrypt(data2, key, iv)
+  const keyiv = util.bs58KeyIvEncode(key, iv)
+
+  return {data: encrypted, keyiv}
+}
+
+/**
+ * Decrypt Object encrypted with EncryptObject
+ * @param {Buffer} data encrypted data buffer
+ * @param {String} keyiv bs58 encoded keyiv string
+ */
+async function decryptObject (data, keyiv) {
+  const {key, iv} = util.bs58KeyIvDecode(keyiv)
+  const decryptedBuffer = util.aes128cbcDecrypt(data, key, iv)
+
+  const decrypted = JSON.parse(decryptedBuffer.toString())
+
+  return decrypted
+}
+
+/**
  * Store object into IPFS service.
  * @param {Buffer} data Object to store in IPFS
  */
@@ -167,5 +199,7 @@ module.exports = {
   list,
   insert,
   fetchEntry,
-  insertCID
+  insertCID,
+  encryptObject,
+  decryptObject
 }
