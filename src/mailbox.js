@@ -113,7 +113,7 @@ async function list(address) {
     return null;
   }
 
-  return result.data;
+  return result.response;
 }
 
 /**
@@ -142,20 +142,14 @@ async function fetch(address, hash) {
     return false;
   }
 
-  let result;
-  try {
-    result = JSON.parse(res.responseText);
-  } catch (e) {
-    console.error("VAULT: Error parsing MAILBOX fetch response:", e);
-    return null;
-  }
+  let result = res.responseText;
 
   if ("error" in result) {
     console.error("VAULT: MAILBOX fetch returned error:", result);
     return null;
   }
 
-  return result.data;
+  return result;
 }
 
 module.exports = {
