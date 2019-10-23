@@ -150,8 +150,9 @@ async function createPendingCheque(userRef, token, message) {
  * @param {String} token reward token address
  * @param {String} amount token amount to add
  * @param {String} message reward description message, maximum 100 characters
+ * @param {JSON} metadata additional metadata about the reward
  */
-async function rewardTo(userRef, token, amount, message) {
+async function rewardTo(userRef, token, amount, message, metadata) {
   const intAmount = parseInt(amount)
   const response = await axios.post(
     __uri + '/reward_to',
@@ -159,6 +160,22 @@ async function rewardTo(userRef, token, amount, message) {
       userid: userRef,
       token_address: token,
       reward_amount: intAmount,
+      reward_message: message,
+      reward_metadata: metadata
+    },
+    { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
+  )
+
+  if ('error' in response.data) throw response.data.error
+  return response.data
+}
+
+async function rewardMany(rewardInfo, token, message) {
+  const response = await axios.post(
+    __uri + '/reward_many',
+    {
+      reward_info: rewardInfo,
+      token_address: token,
       reward_message: message
     },
     { headers: { 'Content-Type': 'application/json;charset=UTF-8', 'api-key': __apiKey }}
@@ -491,5 +508,6 @@ module.exports = {
   queuePendingReward,
   getPendingRewards,
   releasePendingReward,
-  cancelPendingReward
+  cancelPendingReward,
+  rewardMany
 }
