@@ -42,22 +42,48 @@ async function recreate_cid (buf) {
   return multihash
 }
 
+const fetchData = async (url) => {
+  return fetch(
+    url,
+    {
+      headers: {
+        'Accept': 'application/pdf',
+      },
+      responseType: 'arraybuffer',
+    }
+  )
+  .then(response => {
+    if (response.ok) {
+      return response.arrayBuffer();
+    }
+  })
+  .then(buffer => {
+    return buffer
+  });
+
+}
+
 /**
  * Fetch object from IPFS service
  * @param {String} cid Multihash of target object to retreive
  */
-async function fetch (cid, mirroruri = 'https://permastore2.zippie.org') {
+async function fetchPerma (cid, mirroruri = 'https://permastore2.zippie.org') {
   const uri = mirroruri + '/ipfs/' + cid
-  const response = await axios.get(uri, { responseType: 'arraybuffer' })
-  
-  if ('error' in response.data) throw response.data.error
+  try{
+    const response = await fetchData(uri)
+    //  if ('error' in response.data) throw response.data.error
+   const fetchedcid = await recreate_cid(Buffer.from(response))
+   console.log(fetchedcid)
 
-  const fetchedcid = await recreate_cid(Buffer.from(response.data))
-  if (fetchedcid !== cid) {
-    throw 'ERROR: Downloaded data CID (' + fetchedcid + ') does not match CID requested (' + cid + ')'
+   if (fetchedcid !== cid) {
+     throw 'ERROR: Downloaded data CID (' + fetchedcid + ') does not match CID requested (' + cid + ')'
+   }
+ 
+   return response
+  } catch (e) {
+    console.error(e)
   }
 
-  return response.data
 }
 
 /**
@@ -183,18 +209,18 @@ async function fetchEntry (entry) {
   const proof = s[2]
   const cid = s[1]
 
-  const proof_data = await fetch(proof)
+  const proof_data = await fetchPerma(proof)
 
   // XXX: Verify Proof
 
-  const cid_data = await fetch(cid)
+  const cid_data = await fetchPerma(cid)
 
 
   return cid_data
 }
 
 module.exports = {
-  fetch,
+  fetch: fetchPerma,
   store,
   list,
   insert,
