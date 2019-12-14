@@ -42,24 +42,18 @@ async function recreate_cid (buf) {
   return multihash
 }
 
+const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
+
 const fetchData = async (url) => {
-  return fetch(
-    url,
-    {
-      headers: {
-        'Accept': 'application/pdf',
-      },
-      responseType: 'arraybuffer',
-    }
-  )
-  .then(response => {
-    if (response.ok) {
-      return response.arrayBuffer();
-    }
-  })
-  .then(buffer => {
-    return buffer
-  });
+  if(isBrowser) {
+    const response = await fetch(url, { responseType: 'arraybuffer'})
+    const buffer = await response.arrayBuffer()
+    return buffer;
+  }
+
+  const response = await axios.get(url, { responseType: 'arraybuffer' })
+  if ('error' in response.data) throw response.data.error
+  return response.data
 
 }
 
@@ -71,15 +65,14 @@ async function fetchPerma (cid, mirroruri = 'https://permastore2.zippie.org') {
   const uri = mirroruri + '/ipfs/' + cid
   try{
     const response = await fetchData(uri)
-    //  if ('error' in response.data) throw response.data.error
-   const fetchedcid = await recreate_cid(Buffer.from(response))
-   console.log(fetchedcid)
 
-   if (fetchedcid !== cid) {
-     throw 'ERROR: Downloaded data CID (' + fetchedcid + ') does not match CID requested (' + cid + ')'
-   }
- 
-   return response
+    const fetchedcid = await recreate_cid(Buffer.from(response))
+
+    if (fetchedcid !== cid) {
+      throw 'ERROR: Downloaded data CID (' + fetchedcid + ') does not match CID requested (' + cid + ')'
+    }
+  
+    return response
   } catch (e) {
     console.error(e)
   }
