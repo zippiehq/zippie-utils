@@ -44,9 +44,9 @@ async function recreate_cid (buf) {
 
 const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
-const fetchData = async (url) => {
+const fetchData = async (url, cache = 'default') => {
   if(isBrowser) {
-    const response = await fetch(url, { responseType: 'arraybuffer'})
+    const response = await fetch(url, { responseType: 'arraybuffer', cache: cache})
     const buffer = await response.arrayBuffer()
     return buffer;
   }
@@ -64,7 +64,7 @@ const fetchData = async (url) => {
 async function fetchPerma (cid, mirroruri = 'https://permastore2.zippie.org') {
   const uri = mirroruri + '/ipfs/' + cid
   try{
-    const response = await fetchData(uri)
+    const response = await fetchData(uri, 'force-cache')
 
     const fetchedcid = await recreate_cid(Buffer.from(response))
 
