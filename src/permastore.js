@@ -33,6 +33,12 @@ const util = require('./utility')
 const Unixfs = require('ipfs-unixfs')
 const dagPB = require('ipld-dag-pb')
 
+let __uri = "https://fms.zippie.org";
+
+function setUri(uri) {
+  __uri = uri;
+}
+
 async function recreate_cid (buf) {
   var ufs = new Unixfs('file', buf)
   const dagNode = dagPB.DAGNode.create(ufs.marshal())
@@ -117,7 +123,7 @@ async function decryptObject (data, keyiv) {
  */
 async function store (data) {
   data = (typeof data === 'string' ? Buffer.from(data) : data).toString('hex')
-  const uri = 'https://fms.zippie.org/ipfs_store_v2'
+  const uri = __uri + '/ipfs_store_v2'
   const response = await axios.post(uri, { data })
   if ('error' in response.data) throw response.data.error
   return response.data.multihash
@@ -130,7 +136,7 @@ async function store (data) {
 async function list (pubkey) {
   pubkey = util.convertPublicKey(pubkey, true).toString('hex')
 
-  const uri = 'https://fms.zippie.org/perma_list_v2'
+  const uri = __uri + '/perma_list_v2'
   const response = await axios.post(uri, { pubkey })
   if ('error' in response.data) throw response.data.error
   return response.data.response
@@ -143,7 +149,7 @@ async function list (pubkey) {
  * @param {SignerFunc} func Function used to generate auth signature
  */
 async function insert (data, func) {
-  const uri = 'https://fms.zippie.org/perma_store_v2'
+  const uri = __uri + '/perma_store_v2'
 
   const multihash = await store(data)
   const timestamp = Math.floor(Date.now() / 1000) - 1549458383
@@ -172,7 +178,7 @@ async function insert (data, func) {
  * @param {SignerFunc} func Function used to generate auth signature
  */
 async function insertCID (multihash, func) {
-  const uri = 'https://fms.zippie.org/perma_store_v2'
+  const uri = __uri + '/perma_store_v2'
 
   const timestamp = Math.floor(Date.now() / 1000) - 1549458383
 
@@ -197,22 +203,23 @@ async function insertCID (multihash, func) {
  * 
  * @param {String} entry // Permastore Entry
  */
-async function fetchEntry (entry) {
+async function fetchEntry (entry, mirroruri = 'https://permastore2.zippie.org') {
   const s = entry.split('.')
   const proof = s[2]
   const cid = s[1]
 
-  const proof_data = await fetchPerma(proof)
 
+  const proof_data = await fetchPerma(proof, mirroruri)
   // XXX: Verify Proof
 
-  const cid_data = await fetchPerma(cid)
 
+  const cid_data = await fetchPerma(cid, mirroruri)
 
   return cid_data
 }
 
 module.exports = {
+  setUri,
   fetch: fetchPerma,
   store,
   list,
