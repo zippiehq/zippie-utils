@@ -143,6 +143,18 @@ async function list (pubkey) {
 }
 
 /**
+ * List references in permastore V2 index for multiple pubkeys
+ * @param {Buffer|String} pubkeys secp256k1 list of public key to query
+ */
+async function listBatched (pubkeys) {
+  const pubkeys2 = pubkeys.map(pubkey => util.convertPublicKey(pubkey, true).toString('hex'))
+  const uri = __uri + '/perma_list_batched_v2'
+  const response = await axios.post(uri, { pubkeys: pubkeys2 })
+  if ('error' in response.data) throw response.data.error
+  return response.data.response
+}
+
+/**
  * Store data in IPFS and insert a reference into permastore V2 index
  * using supplied function to generate auth signature.
  * @param {Buffer} data Object to store in IPFS and reference in index
@@ -223,6 +235,7 @@ module.exports = {
   fetch: fetchPerma,
   store,
   list,
+  listBatched,
   insert,
   fetchEntry,
   insertCID,
