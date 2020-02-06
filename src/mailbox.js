@@ -20,7 +20,7 @@
  * SOFTWARE.
  *
  */
-const XMLHttpRequestPromise = require("xhr-promise");
+const axios = require("axios");
 
 /**
  * @module zippie-utils/mailbox
@@ -39,20 +39,16 @@ function setUri(uri) {
  */
 
 async function store(address, data) {
-  let req = {
-    url: __uri + "/mailbox_store",
-    method: "POST",
+  let req = JSON.stringify({
+    recipient: address,
+    data: Buffer.from(JSON.stringify(data), "utf8").toString("hex")
+  });
+
+  let res = await axios.post(__uri + "/mailbox_store", req, {
     headers: {
       "Content-Type": "application/json; charset=UTF-8"
-    },
-    data: JSON.stringify({
-      recipient: address,
-      data: Buffer.from(JSON.stringify(data), "utf8").toString("hex")
-    })
-  };
-
-  let res = await new XMLHttpRequestPromise().send(req);
-
+    }
+  });
   if (res.status !== 200) {
     console.error("VAULT: MAILBOX Failed store query for request:", req);
     console.error("VAULT: MAILBOX Failed store query response:", res);
@@ -61,7 +57,7 @@ async function store(address, data) {
 
   let result;
   try {
-    result = JSON.parse(res.responseText);
+    result = res.data;
   } catch (e) {
     console.error("VAULT: Error parsing MAILBOX store response:", e);
     return false;
@@ -81,18 +77,15 @@ async function store(address, data) {
  */
 
 async function list(address) {
-  let req = {
-    url: __uri + "/mailbox_list",
-    method: "POST",
+  let req = JSON.stringify({
+    recipient: address
+  });
+
+  let res = await axios.post(__uri + "/mailbox_list", req, {
     headers: {
       "Content-Type": "application/json; charset=UTF-8"
-    },
-    data: JSON.stringify({
-      recipient: address
-    })
-  };
-
-  let res = await new XMLHttpRequestPromise().send(req);
+    }
+  });
 
   if (res.status !== 200) {
     console.error("VAULT: MAILBOX Failed list query for request:", req);
@@ -102,7 +95,7 @@ async function list(address) {
 
   let result;
   try {
-    result = JSON.parse(res.responseText);
+    result = res.data;
   } catch (e) {
     console.error("VAULT: Error parsing MAILBOX list response:", e);
     return null;
@@ -122,27 +115,23 @@ async function list(address) {
  * @param {String} hash recipient hash
  */
 async function fetch(address, hash) {
-  let req = {
-    url: __uri + "/mailbox_fetch",
-    method: "POST",
+  let req = JSON.stringify({
+    recipient: address,
+    hash: hash
+  });
+
+  let res = await axios.post(__uri + "/mailbox_fetch", req, {
     headers: {
       "Content-Type": "application/json; charset=UTF-8"
-    },
-    data: JSON.stringify({
-      recipient: address,
-      hash: hash
-    })
-  };
-
-  let res = await new XMLHttpRequestPromise().send(req);
-
+    }
+  });
   if (res.status !== 200) {
     console.error("VAULT: MAILBOX Failed fetch query for request:", req);
     console.error("VAULT: MAILBOX Failed fetch query response:", res);
     return false;
   }
 
-  let result = res.responseText;
+  result = res.data;
 
   if ("error" in result) {
     console.error("VAULT: MAILBOX fetch returned error:", result);
