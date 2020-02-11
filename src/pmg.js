@@ -30,23 +30,18 @@ let __uri = 'https://goerli-pmg.zippie.org'
 
 function setUri(uri) {
   __uri = uri
+  return this
 }
 
-/**
- * 
- * @param {*} to 
- * @param {*} data 
- * @param {*} tx 
- */
-async function sponsorCheckCashingWithApproveTx(to, data, tx) {
-    const response = await axios.post(__uri + '/sponsor_redeemblankcheck_v1', {
-        to,
-        data,
-        tx
-      })
-    
-    if ('error' in response) throw response.error
-    return response.data
+function setEnv(env) {
+  if (env === 'dev') {
+    __uri = 'https://goerli-pmg.dev.zippie.org'
+  } else if (env === 'testing') {
+    __uri = 'https://goerli-pmg.testing.zippie.org'
+  } else {
+    __uri = 'https://goerli-pmg.zippie.org'
+  }
+  return this
 }
 
 async function sponsorRedeemBlankCheck_v2(to, data) {
@@ -69,9 +64,19 @@ async function deployToken(to, owner, name, symbol, decimals, amount) {
   return response.data
 }
 
+async function checkStatus() {
+  const response = await axios.get(__uri + '/health')
+
+  if (response.data.notdead) {
+      return true
+  }
+  return false
+}
+
 module.exports = { 
   setUri,
-  sponsorCheckCashingWithApproveTx,
+  setEnv,
   sponsorRedeemBlankCheck_v2,
-  deployToken 
+  deployToken,
+  checkStatus
 }

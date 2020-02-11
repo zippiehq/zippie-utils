@@ -6,6 +6,18 @@ let __apiKey = ''
 function init(uri, apiKey) {
     __uri = uri
     __apiKey = apiKey
+    return this
+}
+
+function setEnv(env) {
+  if (env === 'dev') {
+    __uri = 'https://goerli-rewardapi.dev.zippie.org'
+  } else if (env === 'testing') {
+    __uri = 'https://goerli-rewardapi.testing.zippie.org'
+  } else {
+    __uri = 'https://goerli-rewardapi.zippie.org'
+  }
+  return this
 }
 
 async function createVoucherType(name, description, currency, valueInPoints, valueInCurrency, shopUrl, voucherUrl, expires) {
@@ -181,6 +193,7 @@ async function purchaseVoucher(userId, voucherType, paymentCheque) {
 
 module.exports = {
     init,
+    setEnv,
     createVoucherType,
     deleteVoucherType,
     getVoucherTypes,

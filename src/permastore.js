@@ -34,9 +34,30 @@ const Unixfs = require('ipfs-unixfs')
 const dagPB = require('ipld-dag-pb')
 
 let __uri = "https://fms.zippie.org";
+let __mirroruri = "https://permastore2.zippie.org"
 
 function setUri(uri) {
-  __uri = uri;
+  __uri = uri
+  return this
+}
+
+function setMirrorUri(mirroruri) {
+  __mirroruri = mirroruri;
+  return this
+}
+
+function setEnv(env) {
+  if (env === 'dev') {
+    __uri = 'https://fms.dev.zippie.org'
+    __mirroruri = 'https://permastore2.dev.zippie.org'
+  } else if (env === 'testing') {
+    __uri = 'https://fms.testing.zippie.org'
+    __mirroruri = 'https://permastore2.testing.zippie.org'
+  } else {
+    __uri = 'https://fms.zippie.org'
+    __mirroruri = 'https://permastore2.zippie.org'
+  }
+  return this
 }
 
 async function recreate_cid (buf) {
@@ -67,8 +88,8 @@ const fetchData = async (url, cache = 'default') => {
  * Fetch object from IPFS service
  * @param {String} cid Multihash of target object to retreive
  */
-async function fetchPerma (cid, mirroruri = 'https://permastore2.zippie.org') {
-  const uri = mirroruri + '/ipfs/' + cid
+async function fetchPerma (cid) {
+  const uri = __mirroruri + '/ipfs/' + cid
   try{
     const response = await fetchData(uri, 'force-cache')
 
@@ -215,23 +236,25 @@ async function insertCID (multihash, func) {
  * 
  * @param {String} entry // Permastore Entry
  */
-async function fetchEntry (entry, mirroruri = 'https://permastore2.zippie.org') {
+async function fetchEntry (entry) {
   const s = entry.split('.')
   const proof = s[2]
   const cid = s[1]
 
 
-  const proof_data = await fetchPerma(proof, mirroruri)
+  const proof_data = await fetchPerma(proof)
   // XXX: Verify Proof
 
 
-  const cid_data = await fetchPerma(cid, mirroruri)
+  const cid_data = await fetchPerma(cid)
 
   return cid_data
 }
 
 module.exports = {
   setUri,
+  setMirrorUri,
+  setEnv,
   fetch: fetchPerma,
   store,
   list,

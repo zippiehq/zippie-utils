@@ -59,6 +59,22 @@ function init(prefix, privateKey, apiKey, uri) {
   __privateKey = privateKey
   __apiKey = apiKey
   __uri = uri || __uri
+  return this
+}
+
+/**
+ * Set Reward Service URI based on environment
+ * @param {String} env environment
+ */
+function setEnv(env) {
+  if (env === 'dev') {
+    __uri ='https://goerli-rewardapi.dev.zippie.org'
+  } else if (env === 'testing') {
+    __uri = 'https://goerli-rewardapi.testing.zippie.org'
+  } else {
+    __uri = 'https://goerli-rewardapi.zippie.org'
+  }
+  return this
 }
 
 /**
@@ -488,6 +504,7 @@ async function sendEvent(jsonData) {
 
 module.exports = {
   init,
+  setEnv,
   getUserReference,
   sendEvent,
   getUserBalance,
