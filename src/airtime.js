@@ -30,6 +30,22 @@ let __uri = 'https://goerli-airtime.zippie.org'
 
 function setUri(uri) {
   __uri = uri
+  return this
+}
+
+/**
+ * Set Airtime Service URI based on environment
+ * @param {String} env environment
+ */
+function setEnv(env) {
+  if (env === 'dev') {
+    __uri = 'https://goerli-airtime.dev.zippie.org'
+  } else if (env === 'testing') {
+    __uri = 'https://goerli-airtime.testing.zippie.org'
+  } else {
+    __uri = 'https://goerli-airtime.zippie.org'
+  }
+  return this
 }
 
 /**
@@ -104,6 +120,7 @@ async function getAllowedTokens() {
 
 module.exports = {
   setUri,
+  setEnv,
   getInventory,
   checkPhoneNumber,
   payForTopup,

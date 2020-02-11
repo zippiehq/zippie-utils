@@ -34,6 +34,18 @@ let __uri = 'https://fms.zippie.org'
 
 function setUri(uri) {
   __uri = uri
+  return this
+}
+
+function setEnv(env) {
+  if (env === 'dev') {
+    __uri = 'https://fms.dev.zippie.org'
+  } else if (env === 'testing') {
+    __uri = 'https://fms.testing.zippie.org'
+  } else {
+    __uri = 'https://fms.zippie.org'
+  }
+  return this
 }
 
 /**
@@ -118,6 +130,7 @@ async function revoke (func) {
 
 module.exports = {
   setUri,
+  setEnv,
   store,
   fetch,
   fetchJson,

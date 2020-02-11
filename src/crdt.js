@@ -28,6 +28,10 @@
 const secp256k1 = require('secp256k1')
 const permastore = require('./permastore')
 
+function setEnv(env) {
+  permastore.setEnv(env)
+}
+
 function GrowOnlySet (pubkey, signer) {
   var index  = []
 
@@ -83,4 +87,4 @@ function TwoPhaseSet (added, removed) {
   }
 }
 
-module.exports = { GrowOnlySet, TwoPhaseSet }
+module.exports = { setEnv, GrowOnlySet, TwoPhaseSet }

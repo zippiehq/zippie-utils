@@ -30,6 +30,18 @@ let __uri = 'https://settings.zippie.org'
 
 function setUri(uri) {
   __uri = uri
+  return this
+}
+
+function setEnv(env) {
+  if (env === 'dev') {
+    __uri = 'https://settings.dev.zippie.org'
+  } else if (env === 'testing') {
+    __uri = 'https://settings.testing.zippie.org'
+  } else {
+    __uri = 'https://settings.zippie.org'
+  }
+  return this
 }
 
 async function getDashboardTokenInfo() {
@@ -41,5 +53,6 @@ async function getDashboardTokenInfo() {
 
 module.exports = { 
   setUri,
+  setEnv,
   getDashboardTokenInfo,
 }

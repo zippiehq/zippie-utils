@@ -28,6 +28,10 @@
 const permastore = require('./permastore')
 const utility = require('./utility')
 
+function setEnv(env) {
+    permastore.setEnv(env)
+}
+
 async function possiblyDecrypt(data, aeskey) {
     if (data.encrypted) {
         if (data.encrypted.cipher === 'aes-128-cbc') {
@@ -84,4 +88,4 @@ async function publishToFeedEncrypted(data, signer, aeskey) {
     return await publishToFeedPlaintext(json, signer)
 }
 
-module.exports = { listFeed, publishToFeedPlaintext, publishToFeedRaw, publishToFeedEncrypted}
+module.exports = { setEnv, listFeed, publishToFeedPlaintext, publishToFeedRaw, publishToFeedEncrypted}
