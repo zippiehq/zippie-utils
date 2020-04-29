@@ -26,7 +26,7 @@
  */
 
 const axios = require('axios')
-let __uri = 'https://goerli-pmg.zippie.org'
+let __uri = 'https://zippie-pmg.zippie.com'
 
 function setUri(uri) {
   __uri = uri
@@ -34,18 +34,18 @@ function setUri(uri) {
 }
 
 function setEnv(env) {
-  if (env === 'dev') {
-    __uri = 'https://goerli-pmg.dev.zippie.org'
+  if (env === 'dev' || env === 'development') {
+    __uri = 'https://zippie-pmg.dev.zippie.com'
   } else if (env === 'testing') {
-    __uri = 'https://goerli-pmg.testing.zippie.org'
+    __uri = 'https://zippie-pmg.testing.zippie.com'
   } else {
-    __uri = 'https://goerli-pmg.zippie.org'
+    __uri = 'https://zippie-pmg.zippie.com'
   }
   return this
 }
 
-async function sponsorRedeemBlankCheck_v2(to, data) {
-  const response = await axios.post(__uri + '/sponsor_redeemblankcheck_v2', {
+async function sponsorRedeemBlankCheck_v3(to, data) {
+  const response = await axios.post(__uri + '/sponsor_redeemblankcheck_v3', {
     to,
     data
   })
@@ -76,7 +76,7 @@ async function checkStatus() {
 module.exports = { 
   setUri,
   setEnv,
-  sponsorRedeemBlankCheck_v2,
+  sponsorRedeemBlankCheck_v3,
   deployToken,
   checkStatus
 }

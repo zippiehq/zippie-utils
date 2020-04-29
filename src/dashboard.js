@@ -34,7 +34,7 @@ function setUri(uri) {
 }
 
 function setEnv(env) {
-  if (env === 'dev') {
+  if (env === 'dev' || env === 'development') {
     __uri = 'https://settings.dev.zippie.org'
   } else if (env === 'testing') {
     __uri = 'https://settings.testing.zippie.org'

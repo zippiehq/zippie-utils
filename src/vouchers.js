@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-let __uri = 'https://goerli-rewardapi.zippie.org'
+let __uri = 'https://zippie-rewardapi.zippie.com'
 let __apiKey = ''
 
 function init(uri, apiKey) {
@@ -10,12 +10,12 @@ function init(uri, apiKey) {
 }
 
 function setEnv(env) {
-  if (env === 'dev') {
-    __uri = 'https://goerli-rewardapi.dev.zippie.org'
+  if (env === 'dev' || env === 'development') {
+    __uri = 'https://zippie-rewardapi.dev.zippie.com'
   } else if (env === 'testing') {
-    __uri = 'https://goerli-rewardapi.testing.zippie.org'
+    __uri = 'https://zippie-rewardapi.testing.zippie.com'
   } else {
-    __uri = 'https://goerli-rewardapi.zippie.org'
+    __uri = 'https://zippie-rewardapi.zippie.com'
   }
   return this
 }
