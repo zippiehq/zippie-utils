@@ -30,7 +30,7 @@ const shajs = require('sha.js')
 
 const util = require('./utility')
 
-let __uri = 'https://fms.zippie.org'
+let __uri = 'https://fms.zippie.com'
 
 function setUri(uri) {
   __uri = uri
@@ -38,12 +38,12 @@ function setUri(uri) {
 }
 
 function setEnv(env) {
-  if (env === 'dev') {
-    __uri = 'https://fms.dev.zippie.org'
+  if (env === 'dev' || env === 'development') {
+    __uri = 'https://fms.dev.zippie.com'
   } else if (env === 'testing') {
-    __uri = 'https://fms.testing.zippie.org'
+    __uri = 'https://fms.testing.zippie.com'
   } else {
-    __uri = 'https://fms.zippie.org'
+    __uri = 'https://fms.zippie.com'
   }
   return this
 }

@@ -33,8 +33,8 @@ const util = require('./utility')
 const Unixfs = require('ipfs-unixfs')
 const dagPB = require('ipld-dag-pb')
 
-let __uri = "https://fms.zippie.org";
-let __mirroruri = "https://permastore2.zippie.org"
+let __uri = "https://fms.zippie.com";
+let __mirroruri = "https://permastore2.zippie.com"
 
 function setUri(uri) {
   __uri = uri
@@ -47,15 +47,15 @@ function setMirrorUri(mirroruri) {
 }
 
 function setEnv(env) {
-  if (env === 'dev') {
-    __uri = 'https://fms.dev.zippie.org'
-    __mirroruri = 'https://permastore2.dev.zippie.org'
+  if (env === 'dev' || env === 'development') {
+    __uri = 'https://fms.dev.zippie.com'
+    __mirroruri = 'https://permastore2.dev.zippie.com'
   } else if (env === 'testing') {
-    __uri = 'https://fms.testing.zippie.org'
-    __mirroruri = 'https://permastore2.testing.zippie.org'
+    __uri = 'https://fms.testing.zippie.com'
+    __mirroruri = 'https://permastore2.testing.zippie.com'
   } else {
-    __uri = 'https://fms.zippie.org'
-    __mirroruri = 'https://permastore2.zippie.org'
+    __uri = 'https://fms.zippie.com'
+    __mirroruri = 'https://permastore2.zippie.com'
   }
   return this
 }

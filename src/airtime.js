@@ -26,7 +26,7 @@
  */
 
 const axios = require('axios')
-let __uri = 'https://goerli-airtime.zippie.org'
+let __uri = 'https://zippie-airtime-backend.zippie.com'
 
 function setUri(uri) {
   __uri = uri
@@ -38,12 +38,12 @@ function setUri(uri) {
  * @param {String} env environment
  */
 function setEnv(env) {
-  if (env === 'dev') {
-    __uri = 'https://goerli-airtime.dev.zippie.org'
+  if (env === 'dev' || env === 'development') {
+    __uri = 'https://zippie-airtime-backend.dev.zippie.com'
   } else if (env === 'testing') {
-    __uri = 'https://goerli-airtime.testing.zippie.org'
+    __uri = 'https://zippie-airtime-backend.testing.zippie.com'
   } else {
-    __uri = 'https://goerli-airtime.zippie.org'
+    __uri = 'https://zippie-airtime-backend.zippie.com'
   }
   return this
 }
