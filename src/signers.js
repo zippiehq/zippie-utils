@@ -45,9 +45,9 @@ function secp256k1 (key) {
  * @param {*} vault 
  * @param {*} derive 
  */
-function vault (vault, derive) {
+function vault (vault, derive, scope = 'default') {
   return async function (digest) {
-    const { signature, recovery } = await vault.secp256k1.sign(derive, digest.toString('hex'))
+    const { signature, recovery } = await vault.secp256k1.sign(derive, digest.toString('hex'), scope)
     return { signature, recovery }
   }
 }
