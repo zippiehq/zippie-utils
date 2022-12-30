@@ -26,7 +26,7 @@
     "chai": "^4.2.0",
     "jsdoc": "^3.6.3",
     "jsdoc-template": "github:zippiehq/jsdoc-template",
-    "mocha": "^6.1.4",
+    "mocha": "^10.2.0",
     "nodemon": "^1.18.10"
   }
 }
